@@ -59,6 +59,7 @@
     - name: "Drop database from integration"
       become: yes
       ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username }}  template1 -c \"DROP DATABASE  {{ gazellacom_db_local_name }} \" "
+      ignore_errors: yes
 
     - name: "Create Database on integration"
       become: yes
