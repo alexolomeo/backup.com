@@ -47,9 +47,15 @@
         force: yes
 
     - name: "Start PGDUMP for backup"
-      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_local_workdir }}/backup/{{ gazellacom_db_local_name }}-{{ my_date }}{{ my_time }}.bkp "
+      become: yes
+      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_db_local_name }}-{{ my_date }}{{ my_time }}.bkp "
       args:
         chdir: "{{ gazellacom_local_workdir }}/backup"
+
+#    - name: "Start PGDUMP for backup"
+#      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_local_workdir }}/backup/{{ gazellacom_db_local_name }}-{{ my_date }}{{ my_time }}.bkp "
+#      args:
+#        chdir: "{{ gazellacom_local_workdir }}/backup"
 
     - name: "Finish backup "
       ansible.builtin.command: "echo '[BACKUP] Creating backup {{ gazellacom_local_workdir }}/backu/{{ gazellacom_db_local_name }}-{{ my_date }}-{{ my_time}}.bkp from the database {{ gazellacom_db_local_name }}' >> {{ gazellacom_local_workdir }}/log/backup.log"
