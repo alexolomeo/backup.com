@@ -27,6 +27,7 @@
         force: yes
 
     - name: "Backup directory workdir exists: {{ gazellacom_local_workdir }}/backup"
+      become: yes
       ansible.builtin.file:
         path: "{{ gazellacom_local_workdir }}/backup"
         state: directory
@@ -36,6 +37,7 @@
         force: yes
 
     - name: "Log Directory workdir exists: {{ gazellacom_local_workdir }}/log"
+      become: yes
       ansible.builtin.file:
         path: "{{ gazellacom_local_workdir }}/log"
         state: directory
