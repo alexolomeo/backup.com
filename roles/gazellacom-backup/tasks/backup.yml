@@ -48,7 +48,7 @@
 
     - name: "Start PGDUMP for backup"
       become: yes
-      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_db_local_name }}-{{ my_date }}{{ my_time }}.bkp "
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_db_local_name }}-{{ my_date }}{{ my_time }}.bkp "
       args:
         chdir: "{{ gazellacom_local_workdir }}/backup"
 
