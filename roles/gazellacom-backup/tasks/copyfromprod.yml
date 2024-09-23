@@ -49,6 +49,7 @@
     - name: "Closed all applicatioonn PSQL, PG_RESTORE and PG_DUMP"
       become: yes
       ansible.builtin.shell: "killall psql; killall pg_restore ; killall pg_dump "
+      ignore_errors: yes
 
     - name: "Stop service wildfly"
       ansible.builtin.systemd_service:
