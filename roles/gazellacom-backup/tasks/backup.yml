@@ -17,6 +17,7 @@
        my_time: "{{ tstamp.stdout[10:]}}"
 
     - name: "Ensure app workdir exists: {{ gazellacom_local_workdir }}"
+      become: yes
       ansible.builtin.file:
         path: "{{ gazellacom_local_workdir }}"
         state: directory
