@@ -74,11 +74,10 @@
 
     - name: "Start RESTORING for backup"
       become: yes
-      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_restore -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }} -j 30  -U {{ gazellacom_db_local_username }} -Fc -d {{ gazellacom_db_local_name }}   '{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp' "
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_restore -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }} -j 10  -U {{ gazellacom_db_local_username }} -Fc -d {{ gazellacom_db_local_name }}   '{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp' "
       register: restoring_output
       args:
         chdir: "{{ gazellacom_local_workdir }}/remote"
-      changed_when: false
 
     - name: "Display restoting output  log"
       ansible.builtin.debug:
