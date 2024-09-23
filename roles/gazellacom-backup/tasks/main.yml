@@ -8,7 +8,7 @@
   ansible.builtin.include_tasks: backup.yml
   when: gazellacom_mode == 'backup'    
 
-- name: "Copy From Prooduction"
+- name: "Copy From Production"
   ansible.builtin.include_tasks: copyfromprod.yml
   when: gazellacom_mode == 'copyfromprod'    
 

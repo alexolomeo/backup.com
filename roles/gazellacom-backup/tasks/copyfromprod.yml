@@ -38,7 +38,7 @@
 
     - name: "Clean all connection"
       become: yes
-      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname =  \'{{ gazellacom_db_local_name }}\' \" "
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname =  '{{ gazellacom_db_local_name }}' \" "
 
 #    - name: "Start RESTORING for backup"
 #      become: yes
