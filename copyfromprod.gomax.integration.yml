@@ -20,4 +20,5 @@
       gazellacom_db_local_password: "{{ db_password }}"
       gazellacom_db_local_username_main: "{{ db_username_main }}"
       gazellacom_db_local_password_main: "{{ db_password_main }}"
+      gazellacom_db_restore_node: 10
       gazellacom_db_local_retention: 1                         
