@@ -1,0 +1,23 @@
+---
+
+- name: gomax integration backup
+  hosts: gazellacom
+  become: true
+  roles:
+    - role: gazellacom-backup
+      gazellacom_mode: backup                         #backup, copyfromprod, restore, cleandb
+      gazellacom_db_remote_host:                          
+      gazellacom_db_remote_port:                          
+      gazellacom_db_remote_username:                          
+      gazellacom_db_remote_password:                          
+      gazellacom_db_local_host:                          
+      gazellacom_db_local_port:                          
+      gazellacom_db_local_username:                          
+      gazellacom_db_local_password:                          
+      gazellacom_db_local_username_main:                          
+      gazellacom_db_local_password_main:                          
+      gazellacom_db_local_retention: 10                          
+      gazellacom_project: gomax                       # client
+      gazellacom_environment: integration             #integration, production
+      gazellacom_local_workdir: '/opt/db-awx'
+      gazellacom_local_bin: '/opt/bin-awx'

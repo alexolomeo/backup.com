@@ -1,0 +1,17 @@
+---
+#- name: "Delete previous workdir (if requested)."
+#  ansible.builtin.file:
+#    path: /opt/demoansible3
+#    state: directory
+
+- name: "Backup DB GazellaCOM"
+  ansible.builtin.include_tasks: backup.yml
+  when: gazellacom_mode == 'backup'    
+
+#- name: "Tranfer Compress package"
+#  ansible.builtin.include_tasks: copyfromprod.yml
+#  when: gazellacom_mode == 'copyfromprod'    
+
+#- name: "Deploy new package on wildfly"
+#  ansible.builtin.include_tasks: deploy.yml
+#  when: gazellacom_mode == 'deploy'    

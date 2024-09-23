@@ -1,0 +1,16 @@
+---
+
+- name: gomax integration backup
+  hosts: gazellacom
+  become: true
+  roles:
+    - role: gazellacom-backup
+      gazellacom_mode: backup                         #backup, copyfromprod, restore, cleandb
+      gazellacom_db_local_host:                          
+      gazellacom_db_local_name:                          
+      gazellacom_db_local_port:                          
+      gazellacom_db_local_username:                          
+      gazellacom_db_local_password:                          
+      gazellacom_db_local_retention: 10                          
+      gazellacom_project: gomax                       # client
+      gazellacom_environment: integration             #integration, production

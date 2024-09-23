@@ -1,0 +1,58 @@
+---
+- name: "Preoare to tranfer"
+  block:
+
+    - name: Checking gazellacom_number_build
+      debug:
+        msg: "gazellacom_number_build is {{ gazellacom_number_build }}"
+
+    - name: Checking inventory_hostname
+      debug:
+        msg: "hostname is {{ inventory_hostname }}"
+
+    - name: "Delete previous /tmp/build_{{ gazellacom_number_build }}"
+      ansible.builtin.file:
+        path: "/tmp/{{ gazellacom_project }}_{{ gazellacom_environment }}_build_{{ gazellacom_number_build }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: "Create exists: /tmp/build_{{ gazellacom_number_build }}"
+      ansible.builtin.file:
+        path: "/tmp/{{ gazellacom_project }}_{{ gazellacom_environment }}_build_{{ gazellacom_number_build }}"
+        state: directory
+        owner: "{{ gazellacom_build_user }}"
+        group: "{{ gazellacom_build_group }}"
+        mode: 0775
+        force: yes
+
+    - name: "Move deploy.war to /tmp/build_{{ gazellacom_number_build }}"
+      ansible.builtin.shell: "cp {{ gazellacom_build_workdir }}/target/*.war /tmp/{{ gazellacom_project }}_{{ gazellacom_environment }}_build_{{ gazellacom_number_build }}/"
+
+    - name: "Create compress file build_{{ gazellacom_number_build }}.tar.gz "
+      ansible.builtin.shell: "tar -zcvf {{ gazellacom_project }}_{{ gazellacom_environment }}_build_{{ gazellacom_number_build }}.tar.gz {{ gazellacom_project }}_{{ gazellacom_environment }}_build_{{ gazellacom_number_build }}" 
+      args:
+        chdir: "/tmp"
+
+    - name: "Remove directory file build_{{ gazellacom_number_build }} after compress"
+      ansible.builtin.file:
+        path: "/tmp/{{ gazellacom_project }}_{{ gazellacom_environment }}_build_{{ gazellacom_number_build }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Fetch the file from build localserver
+      run_once: yes
+      fetch: 
+        src: "/tmp/{{ gazellacom_project }}_{{ gazellacom_environment }}_build_{{ gazellacom_number_build }}.tar.gz"
+        dest: buffer/ 
+        flat: yes
+
+    - name: set to delegate variable from controller to com
+      set_fact:
+        gazellacom_number_build: "{{ gazellacom_number_build }}"
+        gazellacom_project: "{{ gazellacom_project }}"
+        gazellacom_environment: "{{ gazellacom_environment }}"
+      delegate_facts: yes
+      delegate_to: com
+
+  when: inventory_hostname == 'controller'
+

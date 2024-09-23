@@ -1,0 +1,12 @@
+---
+
+gazellacom_mode: backup                         #backup, copyfromprod, restore, cleandb
+gazellacom_db_local_host: 
+gazellacom_db_local_port:
+gazellacom_db_local_username:
+gazellacom_db_local_password:
+gazellacom_db_local_retention: 10
+gazellacom_project: client                      # client
+gazellacom_environment: integration             #integration, production
+gazellacom_local_base: '/opt/db-awx'
+gazellacom_local_workdir: "{{ gazellacom_local_base }}/{{ gazellacom_environment }}"
