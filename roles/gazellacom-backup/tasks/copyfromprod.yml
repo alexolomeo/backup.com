@@ -88,16 +88,16 @@
       become: yes
       ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"ALTER DATABASE {{ gazellacom_db_local_name }} OWNER TO {{ gazellacom_db_local_username }} \" "
 
-#    - name: "Start RESTORING for backup"
-#      become: yes
-#      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_restore -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }} -j {{ gazellacom_db_restore_node }}  -U {{ gazellacom_db_local_username }} -Fc -d {{ gazellacom_db_local_name }}   '{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp' "
-#      register: restoring_output
-#      args:
-#        chdir: "{{ gazellacom_local_workdir }}/remote"
+    - name: "Start RESTORING for backup"
+      become: yes
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_restore -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }} -j {{ gazellacom_db_restore_node }}  -U {{ gazellacom_db_local_username }} -Fc -d {{ gazellacom_db_local_name }}   '{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp' --verbose 2 > {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
+      register: restoring_output
+      args:
+        chdir: "{{ gazellacom_local_workdir }}/remote"
 
-#    - name: "Display restoting output  log"
-#      ansible.builtin.debug:
-#        var: restoring_output.stdout
+    - name: "Display restoting output  log"
+      ansible.builtin.debug:
+        var: restoring_output.stdout
         
     - name: "Finish backup "
       become: yes
