@@ -13,8 +13,8 @@
 
     - name: Set variables
       set_fact:
-       my_date: "{{ tstamp.stdout[0:10]}}"
-       my_time: "{{ tstamp.stdout[10:]}}"
+       my_date: "{{ tstamp.stdout[0:8]}}"
+       my_time: "{{ tstamp.stdout[8:]}}"
 
     - name: "Ensure app workdir exists: {{ gazellacom_local_workdir }}"
       become: yes
@@ -47,7 +47,7 @@
         force: yes
 
     - name: "Start PGDUMP for backup"
-      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_local_workdir }}/backup/{{ gazellacom_db_local_name }}-{{ my_date }}-{{ my_time}}.bkp "
+      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_local_workdir }}/backup/{{ gazellacom_db_local_name }}-{{ my_date }}-{{ my_time }}.bkp "
       args:
         chdir: "{{ gazellacom_local_workdir }}/backup"
 
