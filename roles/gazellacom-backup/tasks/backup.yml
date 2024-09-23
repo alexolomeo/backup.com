@@ -21,8 +21,8 @@
       ansible.builtin.file:
         path: "{{ gazellacom_local_workdir }}"
         state: directory
-        owner: "{{ gazellacom_awx_user }}"
-        group: "{{ gazellacom_awx_group }}"
+#        owner: "{{ gazellacom_awx_user }}"
+#        group: "{{ gazellacom_awx_group }}"
         mode: 0775
         force: yes
 
@@ -31,8 +31,8 @@
       ansible.builtin.file:
         path: "{{ gazellacom_local_workdir }}/backup"
         state: directory
-        owner: "{{ gazellacom_awx_user }}"
-        group: "{{ gazellacom_awx_group }}"
+#        owner: "{{ gazellacom_awx_user }}"
+#        group: "{{ gazellacom_awx_group }}"
         mode: 0775
         force: yes
 
@@ -41,13 +41,13 @@
       ansible.builtin.file:
         path: "{{ gazellacom_local_workdir }}/log"
         state: directory
-        owner: "{{ gazellacom_awx_user }}"
-        group: "{{ gazellacom_awx_group }}"
+#       owner: "{{ gazellacom_awx_user }}"
+#        group: "{{ gazellacom_awx_group }}"
         mode: 0775
         force: yes
 
     - name: "Start PGDUMP for backup"
-      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_local_workdir }}/backu/{{ gazellacom_db_local_name }}-{{ my_date }}-{{ my_time}}.bkp "
+      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_dump -h {{ gazellacom_db_local_host }} -U {{ gazellacom_db_local_username }} --exclude-table-data 'audit.*'  -Fc {{ gazellacom_db_local_name }} > {{ gazellacom_local_workdir }}/backup/{{ gazellacom_db_local_name }}-{{ my_date }}-{{ my_time}}.bkp "
       args:
         chdir: "{{ gazellacom_local_workdir }}/backup"
 
