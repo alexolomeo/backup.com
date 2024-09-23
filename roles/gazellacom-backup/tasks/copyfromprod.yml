@@ -46,6 +46,11 @@
         mode: 0775
         force: yes
 
+    - name: "Stop service wildfly"
+      ansible.builtin.systemd_service:
+        state: stopped
+        name: wildfly
+
     - name: "Start get backup from production"
       become: yes
       ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_remote_password }} ; pg_dump -h {{ gazellacom_db_remote_host }} -p {{ gazellacom_db_remote_port }} -U {{ gazellacom_db_remote_username }} -Fc  {{ gazellacom_db_remote_name }} >  {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp "
@@ -87,4 +92,9 @@
     - name: "Finish backup "
       become: yes
       ansible.builtin.shell: "echo '{{ my_date }}{{ my_time }} [RESTORING] Creating restoring form backup {{ gazellacom_local_workdir }}/remote/{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time}}.bkp from the database {{ gazellacom_db_local_name }}' >> {{ gazellacom_local_workdir }}/log/copyfromprod.log"
+
+    - name: "Start service wildfly"
+      ansible.builtin.systemd_service:
+        state: started
+        name: wildfly
 
