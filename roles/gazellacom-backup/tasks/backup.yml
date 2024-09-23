@@ -58,5 +58,6 @@
 #        chdir: "{{ gazellacom_local_workdir }}/backup"
 
     - name: "Finish backup "
-      ansible.builtin.command: "echo '[BACKUP] Creating backup {{ gazellacom_local_workdir }}/backu/{{ gazellacom_db_local_name }}-{{ my_date }}-{{ my_time}}.bkp from the database {{ gazellacom_db_local_name }}' >> {{ gazellacom_local_workdir }}/log/backup.log"
+      become: yes
+      ansible.builtin.shell: "echo '[BACKUP] Creating backup {{ gazellacom_local_workdir }}/backup/{{ gazellacom_db_local_name }}-{{ my_date }}{{ my_time}}.bkp from the database {{ gazellacom_db_local_name }}' >> {{ gazellacom_local_workdir }}/log/backup.log"
 
