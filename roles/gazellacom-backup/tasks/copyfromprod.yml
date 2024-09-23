@@ -56,21 +56,21 @@
       become: yes
       ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname =  '{{ gazellacom_db_local_name }}' \" "
 
-    - name: "Drop database from integraation"
+    - name: "Drop database from integration"
       become: yes
-      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username }}  template1 -c \"DROP DATABASE  '{{ gazellacom_db_local_name }}' \" "
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username }}  template1 -c \"DROP DATABASE  {{ gazellacom_db_local_name }} \" "
 
     - name: "Create Database on integration"
       become: yes
-      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"CREATE DATABASE '{{ gazellacom_db_local_name }}' \" "
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"CREATE DATABASE {{ gazellacom_db_local_name }} \" "
 
     - name: "Grant Database on integration"
       become: yes
-      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"GRANT ALL PRIVILEGES ON DATABASE '{{ gazellacom_db_local_name }}' TO {{ gazellacom_db_local_username }}  \" "
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"GRANT ALL PRIVILEGES ON DATABASE {{ gazellacom_db_local_name }} TO {{ gazellacom_db_local_username }}  \" "
 
     - name: "Set Owner Database on integration"
       become: yes
-      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"ALTER DATABASE '{{ gazellacom_db_local_name }}' OWNER TO {{ gazellacom_db_local_username }} \" "
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"ALTER DATABASE {{ gazellacom_db_local_name }} OWNER TO {{ gazellacom_db_local_username }} \" "
 
     - name: "Start RESTORING for backup"
       become: yes
