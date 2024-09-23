@@ -10,3 +10,4 @@ gazellacom_project: client                      # client
 gazellacom_environment: integration             #integration, production
 gazellacom_local_base: '/opt/db-awx'
 gazellacom_local_workdir: "{{ gazellacom_local_base }}/{{ gazellacom_environment }}"
+gazellacom_awx_user:  gazellacom_app 
