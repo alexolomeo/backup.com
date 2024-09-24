@@ -56,11 +56,6 @@
         state: stopped
         name: wildfly
 
-    - name: "Previus settinng  Database on integration"
-      become: yes
-      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"{{ gazellacom_db_previus_command }} \" "
-      ignore_errors: yes
-
     - name: "Start get backup from production"
       become: yes
       ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_remote_password }} ; pg_dump -h {{ gazellacom_db_remote_host }} -p {{ gazellacom_db_remote_port }} -U {{ gazellacom_db_remote_username }} -Fc  {{ gazellacom_db_remote_name }} >  {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp "
@@ -87,6 +82,11 @@
     - name: "Set Owner Database on integration"
       become: yes
       ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"ALTER DATABASE {{ gazellacom_db_local_name }} OWNER TO {{ gazellacom_db_local_username }} \" "
+
+    - name: "Previus settinng  Database on integration"
+      become: yes
+      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"{{ gazellacom_db_previus_command }} \" "
+      ignore_errors: yes
 
     - name: "Start RESTORING for backup"
       become: yes
