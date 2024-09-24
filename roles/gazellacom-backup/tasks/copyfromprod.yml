@@ -94,6 +94,8 @@
       register: restoring_output
       args:
         chdir: "{{ gazellacom_local_workdir }}/remote"
+      changed_when: false
+
 
     - name: "Put log en  {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
       ansible.builtin.shell: "{{ restoring_output.stdout }} > {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
