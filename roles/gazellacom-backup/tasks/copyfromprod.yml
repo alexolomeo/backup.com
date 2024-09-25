@@ -88,34 +88,34 @@
       ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password_main }} ; psql -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }}  -U {{ gazellacom_db_local_username_main }}  template1 -c \"{{ gazellacom_db_previus_command }} \" "
       ignore_errors: yes
 
-#    - name: "Start RESTORING for backup"
-#      become: yes
-#      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_restore -v -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }} -j {{ gazellacom_db_restore_node }}  -U {{ gazellacom_db_local_username }} -Fc -d {{ gazellacom_db_local_name }}   {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
-#      register: restoring_output
-#      args:
-#        chdir: "{{ gazellacom_local_workdir }}/remote"
-#      changed_when: true
-#      ignore_errors: yes
+    - name: "Start RESTORING for backup"
+      become: yes
+      ansible.builtin.command: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_restore -v -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }} -j {{ gazellacom_db_restore_node }}  -U {{ gazellacom_db_local_username }} -Fc -d {{ gazellacom_db_local_name }}   {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
+      register: restoring_output
+      args:
+        chdir: "{{ gazellacom_local_workdir }}/remote"
+      changed_when: true
+      ignore_errors: yes
     
-    - name: "Restore database {{ gazellacom_db_local_name }}"
-      community.postgresql.postgresql_db:
-        name: "{{ gazellacom_db_local_name }}"
-        state: restore
-        target: "{{ gazellacom_local_workdir }}/remote{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
-        login_host: "{{ gazellacom_db_local_host }}"
-        login_user: "{{ gazellacom_db_local_username }}"
-        login_password: "{{ gazellacom_db_local_password }}"
-        port: "{{ gazellacom_db_local_port }}"
+#    - name: "Restore database {{ gazellacom_db_local_name }}"
+#      community.postgresql.postgresql_db:
+#        name: "{{ gazellacom_db_local_name }}"
+#        state: restore
+#        target: "{{ gazellacom_local_workdir }}/remote{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
+#        login_host: "{{ gazellacom_db_local_host }}"
+#        login_user: "{{ gazellacom_db_local_username }}"
+#        login_password: "{{ gazellacom_db_local_password }}"
+#        port: "{{ gazellacom_db_local_port }}"
 
-#    - name: "Put log en  {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
-#      ansible.builtin.shell: "{{ restoring_output.stdout_lines }} > {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
-#      args:
-#        chdir: "{{ gazellacom_local_workdir }}/remote"
+    - name: "Put log en  {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
+      ansible.builtin.shell: "{{ restoring_output.stdout_lines }} > {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
+      args:
+        chdir: "{{ gazellacom_local_workdir }}/remote"
         
-#    - name: "Display restoting output  log"
-#      ansible.builtin.debug:
-#        var: restoring_output.stdout_lines
-#        verbosity: 2
+    - name: "Display restoting output  log"
+      ansible.builtin.debug:
+        var: restoring_output.stdout_lines
+        verbosity: 2
 
     - name: "Finish backup "
       become: yes
