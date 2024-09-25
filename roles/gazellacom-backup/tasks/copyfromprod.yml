@@ -110,6 +110,7 @@
     - name: "Put log en  {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
       ansible.builtin.shell: "{{ restoring_output.stdout_lines }} > {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
       args:
+        executable: /bin/bash
         chdir: "{{ gazellacom_local_workdir }}/remote"
         
     - name: "Display restoting output  log"
