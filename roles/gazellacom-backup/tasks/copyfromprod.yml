@@ -36,15 +36,33 @@
         mode: 0775
         force: yes
 
-    - name: "log directory workdir exists: {{ gazellacom_local_workdir }}/remote"
+    - name: "log directory workdir exists: {{ gazellacom_local_workdir }}/log"
       become: yes
       ansible.builtin.file:
-        path: "{{ gazellacom_local_workdir }}/remote"
+        path: "{{ gazellacom_local_workdir }}/log"
         state: directory
 #        owner: "{{ gazellacom_awx_user }}"
 #        group: "{{ gazellacom_awx_group }}"
         mode: 0775
         force: yes
+
+    - name: "bin directory workdir exists: {{ gazellacom_local_workdir }}/bin"
+      become: yes
+      ansible.builtin.file:
+        path: "{{ gazellacom_local_workdir }}/bin"
+        state: directory
+#        owner: "{{ gazellacom_awx_user }}"
+#        group: "{{ gazellacom_awx_group }}"
+        mode: 0775
+        force: yes
+    - name: Install - Copy the gazellacom-restore script
+      ansible.builtin.template:
+        src: gazellacom-restore.j2
+        dest: "{{ gazellacom_local_workdir }}/bin/gazellacom-restore"
+#        owner: "{{ gazellacom_awx_user }}"
+#        group: "{{ gazellacom_awx_user }}"
+        force: no
+        mode: 0775
 
     - name: "Closed all applicatioonn PSQL, PG_RESTORE and PG_DUMP"
       become: yes
@@ -90,33 +108,20 @@
 
     - name: "Start RESTORING for backup"
       become: yes
-      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_restore -v -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }} -j {{ gazellacom_db_restore_node }}  -U {{ gazellacom_db_local_username }} -Fc -d {{ gazellacom_db_local_name }}   {{ gazellacom_local_workdir }}/remote/{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
-      register: restoring_output
+      ansible.builtin.shell: "gazellacom-restore {{ gazellacom_db_local_username }} {{ gazellacom_db_local_password }} {{ gazellacom_db_local_name }} {{ gazellacom_db_local_host }} {{ gazellacom_local_workdir }}/remote/{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
       args:
         executable: /bin/bash
-        chdir: "{{ gazellacom_local_workdir }}/remote"
+        chdir: "{{ gazellacom_local_workdir }}/bin"
       ignore_errors: yes
     
-#    - name: "Restore database {{ gazellacom_db_local_name }}"
-#      community.postgresql.postgresql_db:
-#        name: "{{ gazellacom_db_local_name }}"
-#        state: restore
-#        target: "{{ gazellacom_local_workdir }}/remote{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
-#        login_host: "{{ gazellacom_db_local_host }}"
-#        login_user: "{{ gazellacom_db_local_username }}"
-#        login_password: "{{ gazellacom_db_local_password }}"
-#        port: "{{ gazellacom_db_local_port }}"
-
-    - name: "Put log en  {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
-      ansible.builtin.shell: "{{ restoring_output.stdout_lines }} > {{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.output"
-      args:
-        executable: /bin/bash
-        chdir: "{{ gazellacom_local_workdir }}/remote"
-        
-    - name: "Display restoting output  log"
-      ansible.builtin.debug:
-        var: restoring_output.stdout_lines
-        verbosity: 2
+#    - name: "Start RESTORING for backup"
+#      become: yes
+#      ansible.builtin.shell: "export PGPASSWORD={{ gazellacom_db_local_password }} ; pg_restore -v -h {{ gazellacom_db_local_host }} -p {{ gazellacom_db_local_port }} -j {{ gazellacom_db_restore_node }}  -U {{ gazellacom_db_local_username }} -Fc -d {{ gazellacom_db_local_name }}   {{ gazellacom_local_workdir }}/remote/{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
+#      args:
+#        executable: /bin/bash
+#        chdir: "{{ gazellacom_local_workdir }}/remote"
+#      ignore_errors: yes
+    
 
     - name: "Finish backup "
       become: yes
