@@ -108,9 +108,8 @@
 
     - name: "Start RESTORING for backup"
       become: yes
-      ansible.builtin.shell: "gazellacom-restore {{ gazellacom_db_local_username }} {{ gazellacom_db_local_password }} {{ gazellacom_db_local_name }} {{ gazellacom_db_local_host }} {{ gazellacom_local_workdir }}/remote/{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
+      ansible.builtin.shell: "{{ gazellacom_local_workdir }}/bin/gazellacom-restore {{ gazellacom_db_local_username }} {{ gazellacom_db_local_password }} {{ gazellacom_db_local_name }} {{ gazellacom_db_local_host }} {{ gazellacom_local_workdir }}/remote/{{ gazellacom_db_remote_name }}-{{ my_date }}{{ my_time }}.bkp"
       args:
-        executable: /bin/bash
         chdir: "{{ gazellacom_local_workdir }}/bin"
       ignore_errors: yes
     
