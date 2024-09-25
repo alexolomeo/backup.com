@@ -30,7 +30,7 @@ BACKUPDATE="$(date +'%Y%m%d-%H%M')"
 # Load Database from production environment
 export PGPASSWORD=$RESTORE_DBUSERPASS
 
-pg_restore -v --host $RESTORE_DBHOST --port $RESTORE_PORT -j $RESTORE_NODE  -U $RESTORE_DBUSERNAME  -Fc -d $RESTORE_DB "$SOURCE_DB" > $RESTORE_LOG
+pg_restore -v --host $RESTORE_DBHOST --port $RESTORE_PORT -j $RESTORE_NODE  -U $RESTORE_DBUSERNAME  -Fc -d $RESTORE_DB "$SOURCE_DB" >> $RESTORE_LOG &
 
 echo "`date +%Y-%m-%d.%H:%M:%S` ----------------FINISH-------------------------- "  >> $LOGS_PATH/restore.log
 
